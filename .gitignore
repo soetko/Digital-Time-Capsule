@@ -1,0 +1,66 @@
+# Byte-compiled / cache / compiled files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Environment
+.env
+*.env
+venv/
+ENV/
+env/
+.venv/
+.conda/
+*.egg-info/
+.Python
+
+# Anaconda
+*.conda
+*.ipynb_checkpoints/
+
+# VSCode settings
+.vscode/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Flask-Migrate / Alembic
+migrations/versions/
+
+# SQLite DB (if any)
+*.sqlite
+*.db
+
+# Logs
+*.log
+
+# Compiled assets or temporary files
+*.bak
+*.swp
+*.swo
+*.~*
+
+# Coverage/test stuff
+htmlcov/
+.coverage
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# JetBrains IDEs
+.idea/
+
+# OneDrive
+*.tmp
+~$*
+*.lnk
+
+# Ignore any file with a colon (:) in the name (works for Git but not always on Windows FS)
+*:* 

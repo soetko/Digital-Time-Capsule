@@ -5,6 +5,9 @@ __pycache__/
 *.pyd
 *.pyc
 
+#ignoring migrations/__pycache__/ explicitly
+migrations/**/__pycache__/
+
 # Environment
 .env
 *.env
@@ -28,9 +31,6 @@ env/
 Thumbs.db
 ehthumbs.db
 Desktop.ini
-
-# Flask-Migrate / Alembic
-migrations/versions/
 
 # SQLite DB (if any)
 *.sqlite
@@ -62,5 +62,5 @@ coverage.xml
 ~$*
 *.lnk
 
-# Ignore any file with a colon (:) in the name (works for Git but not always on Windows FS)
+# Ignore any file with a colon (:) in the name 
 *:* 

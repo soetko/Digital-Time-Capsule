@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <h1>{{ ('Journal') }}</h1>
+    {% for journal_entry in journal_entries %}
+        {% for item in journal_entry %}            
+            {% set entry_id = item | int %}
+            <div>
+                <p> <!--<i> {{ journal_entry[item] }} </i> -->
+                    <b>{{ journal_entry[item].title }}</b><br/><br/>
+                    published on: {{ journal_entry[item].date }} <br/><br/>
+                    {{ journal_entry[item].content}}<br/>
+                </p>
+                <div align="right">
+                    <p><a href="{{ url_for('journal.edit_entry', entry_id=entry_id) }}">edit</a></p><br/><hr/>
+                </div>
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}

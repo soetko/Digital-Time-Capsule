@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% import "bootstrap_wtf.html" as wtf %}
+
+{% block content %}
+    <h1>Hi, {{ current_user.username }}!</h1>
+    {% for journal_entry in journal_entries %}
+    <div><p><b>{{ journal_entry.journal_title }}:</b></br>{{ journal_entry.body }}</p></div>
+    {% endfor %}
+{% endblock %}

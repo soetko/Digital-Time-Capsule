@@ -49,6 +49,7 @@ class JournalEntry(db.Model):
     entry_published: so.Mapped[str] = so.mapped_column(default=lambda: datetime.now(timezone.utc), index=True)
     last_mod_date: so.Mapped[datetime] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
     author: so.Mapped[User] = so.relationship(back_populates='journal_entries')
+    tags: so.Mapped[list['Tag']] = so.relationship(secondary='journal_entry_tag', backref=so.backref('journal_entries', lazy='dynamic'))
     #about_me: so.Mapped[User] = so.relationship()
 
     def __repr__(self):

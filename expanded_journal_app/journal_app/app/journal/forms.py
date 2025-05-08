@@ -12,10 +12,12 @@ from app.journal import bp
 class JournalEntryForm(FlaskForm):
     title = StringField(('Title'), validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
+    tags = StringField('Tags (comma-separated)')
     save_draft = SubmitField('Save Draft')
     submit = SubmitField('Save')
 
 class EditJournalEntryForm(FlaskForm):
     title = StringField(('Title'), validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
+    tags = StringField('Tags (comma-separated)')
     submit = SubmitField('Save')

@@ -13,6 +13,8 @@ from app.journal.forms import JournalEntryForm, EditJournalEntryForm
 from app.journal import bp
 import datetime as dt
 import pandas as pd
+import json
+from app.tags_generation.tags_generation import tags_generator
 
 
 @bp.route('/journal', methods=['GET', 'POST'])
@@ -68,6 +70,14 @@ def new_entry():
         flash('New entry created.')
         return redirect(url_for('journal.journal'))
     return render_template('journal/new_entry.html', form=form)
+
+@bp.route('/generate_entry_tags', methods=['POST'])
+@login_required
+def generate_entry_tags():
+    data = request.get_json()
+    content = data.get('content', '')
+    generated_tags = tags_generator(content)
+    return json.dumps({'tags': generated_tags})
 
 @bp.route('/edit_entry/<int:entry_id>', methods=['GET', 'POST'])
 @login_required

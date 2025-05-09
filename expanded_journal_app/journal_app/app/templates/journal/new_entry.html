@@ -3,5 +3,40 @@
 
 {% block content %}
     <h1>{{ ('New Journal Entry') }}</h1>
-    {{ wtf.quick_form(form) }}
+    <form action="" method="post">
+        {{ wtf.quick_form(form) }}
+        <br>
+        <b>Try our AI Features:</b>
+        <button type="button" id="generate_tags" class="btn btn-primary">Generate Tags</button>        
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const generateTagsButton = document.getElementById('generate_tags');
+            const contentField = document.getElementById('content'); 
+            const tagsField = document.getElementById('tags');       
+
+            if (generateTagsButton && contentField && tagsField) {
+                generateTagsButton.addEventListener('click', function() {
+                    const content = contentField.value;
+                    fetch('/journal/generate_entry_tags', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ 'content': content })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.tags) {
+                            tagsField.value = data.tags.join(', ');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
 {% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ ('Journal') }}</h1></br></br>
+    {% for journal_entry in journal_entries %}</br>
+        {% for item in journal_entry %}                  
+            <h4>{{ journal_entry[item].title }}</h4><br/><br/>
+            <h6>published on: {{ journal_entry[item].date }}</h6> <br/><br/>
+            <p> 
+                {% if journal_entry[item].image_name != 'blank' %}
+                {% set filePath = journal_entry[item].image_path.replace('static/', '')  %}
+                {% set fullPath = '{}{}'.format('', url_for('static', filename=filePath)) %}
+                    
+                    <div class="dj-3"><img src="{{ fullPath }}" style='width: 40%' alt="{{ fullPath }}">
+                    </div>
+                    <br/>              
+                {% endif %}
+                {% for line in journal_entry[item].content.split('\n') %}
+                    {{ line }}<br/>
+                {% endfor %}
+            </p>
+            {% if journal_entry[item].get('tags') %}
+            <p>
+                Tags:
+                {% for tag in journal_entry[item].tags %}
+                    <span class="badge bg-secondary">{{ tag }}</span>
+                {% endfor %}
+            </p>
+        {% endif %}
+            <div align="right">
+                <p><a href="{{ url_for('.edit_entry', entry_id=item) }}">edit</a></p><br/><hr/>
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% import "bootstrap_wtf.html" as wtf %}
+
+{% block content %}
+    <h1>{{ ('New Journal Entry') }}</h1>
+    {{ wtf.quick_form_edit(form) }}
+    
+    <div align="right">
+        <tr>
+        <td scope="col"><button type="button" id="generate_tags" class='btn btn-primary dj-3', style='float:right; margin-right:7%; margin-left:1%;'>Generate Tags</button></td>
+        <td scope="col"><b style='float:right;margin-right:1%;margin-top:.5%'>Try our AI Features:</b></td>
+        </tr>
+    </div>
+{% endblock %}
+
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const generateTagsButton = document.getElementById('generate_tags');
+            const contentField = document.getElementById('content'); 
+            const tagsField = document.getElementById('tags');       
+
+            if (generateTagsButton && contentField && tagsField) {
+                generateTagsButton.addEventListener('click', function() {
+                    const content = contentField.value;
+                    fetch('/journal/generate_entry_tags', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ 'content': content })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.tags) {
+                            tagsField.value = data.tags.join(', ');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+{% endblock %}

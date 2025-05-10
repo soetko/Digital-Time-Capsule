@@ -9,7 +9,7 @@
             <h6>published on: {{ journal_entry[item].date }}</h6> <br/><br/>
             <p> 
                 {% if journal_entry[item].image_name != 'blank' %}
-                {% set filePath = journal_entry[item].image_path.replace('app/journal/static/', '')  %}
+                {% set filePath = journal_entry[item].image_path.replace('app/static/', '')  %}
                 {% set fullPath = url_for('static',filename=filePath) %}
                     
                     <div class="dj-3"><img src="{{ fullPath }}" style='width: 40%' alt="{{ fullPath }}">

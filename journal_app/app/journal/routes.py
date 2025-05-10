@@ -135,7 +135,7 @@ def upload_file(f_path, jrnl_entry, new_entry=True):
     if filename != '':
         
         ### organize directories
-        target_dir = 'app/journal/static/uploads/{}'.format(current_user.username)
+        target_dir = 'app/static/uploads/{}'.format(current_user.username)
         if not os.path.exists(target_dir):
             os.mkdir(target_dir)
         #target_dir = os.path.join('/static/uploads/stake', current_user.username)

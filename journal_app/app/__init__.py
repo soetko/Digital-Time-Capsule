@@ -20,7 +20,7 @@ login.login_message = 'Log in required.'
 bootstrap = Bootstrap5()
 
 def create_app(config_class=Config):
-    app = Flask(__name__, static_folder='static',static_url_path='/app/journal/static/')
+    app = Flask(__name__, static_folder='static',static_url_path='/app/static/')
     #app = Flask(__name__, static_folder='./static')#,static_url_path='/app/journal/static/')
     app.config.from_object(config_class)
     #app.config['MEDIA_UPLOADS'] = 'static/uploads/'

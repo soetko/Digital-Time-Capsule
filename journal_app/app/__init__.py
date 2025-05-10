@@ -1,5 +1,4 @@
 from flask import Flask, request, current_app, send_from_directory, url_for
-from config import Config
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -10,6 +9,7 @@ from flask_bootstrap import Bootstrap5
 from werkzeug.utils import secure_filename
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
+from config import Config
 
 
 db = SQLAlchemy()
@@ -20,9 +20,9 @@ login.login_message = 'Log in required.'
 bootstrap = Bootstrap5()
 
 def create_app(config_class=Config):
-    app = Flask(__name__, static_folder='./static')
+    app = Flask(__name__, static_folder='static',static_url_path='/app/journal/static/')
     app.config.from_object(config_class)
-    app.config['MEDIA_UPLOADS'] = './static/uploads/'
+    #app.config['MEDIA_UPLOADS'] = 'static/uploads/'
     app.config['ALLOWED_EXTENSIONS'] = [
         '.jpg', '.jpeg','.png', '.gif', '.mp4', '.avi', '.mp3', '.pdf',
         'jpg', 'gif', 'png', 'jpeg', 'mp4', 'avi', 'mp3', 'pdf'

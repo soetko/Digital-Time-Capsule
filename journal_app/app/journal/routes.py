@@ -27,8 +27,14 @@ from app.tags_generation.tags_generation import tags_generator
 @login_required
 def journal():
 
+
     test_entry_exists()
     entries = JournalEntry.query.filter_by(user_id=current_user.user_id).order_by(JournalEntry.entry_published.desc()).all()
+
+    query = sa.select(Tag)
+    tags = db.session.scalars(query).all()
+    for x in tags:
+        flash(x)
 
 
     journal_entries = []
@@ -40,18 +46,17 @@ def journal():
         journal_entry[the_key] = {
             'title': entry.entry_title,
             'date': pd.to_datetime(entry.entry_published).strftime('%B %d, %Y at %H:%M GMT'),
-            'image_name': ['blank', entry.media_id][0 if entry.media_id is None else 1],
+            'image_path': ['blank', entry.media_id][0 if entry.media_id is None else 1],
             'content': entry.entry_body,
             'tags': tags
         }
 
-        if journal_entry[the_key]['image_name'] != 'blank':
+        if journal_entry[the_key]['image_path'] != 'blank':
             media_file_info = db.first_or_404(sa.select(Media).where(Media.media_id == entry.media_id))
                     
             if media_file_info.media_format in ['jpg', 'png', 'gif', '.jpg', '.png', '.gif']:
 
                 journal_entry[the_key]['image_path'] = media_file_info.media_file_path
-                #journal_entry[the_key]['image'] = mpimg.imread(media_file_info.media_file_path)
 
 
         journal_entries.append(journal_entry.copy())
@@ -74,9 +79,9 @@ def new_entry():
     if request.method == 'POST' and form.validate_on_submit():
         new_entry = JournalEntry(
             user_id = current_user.user_id,            
-            entry_title=form.title.data.replace('\n', '<br/>'),
+            entry_title=form.title.data,
             media_id=None,
-            entry_body=form.content.data
+            entry_body=form.content.data.replace('\n', '<br/>')
         )
         file = request.files['media_file']
         if file.filename != '':
@@ -130,9 +135,14 @@ def upload_file(f_path, jrnl_entry, new_entry=True):
     if filename != '':
         
         ### organize directories
-        target_dir = os.path.join(current_app.config['MEDIA_UPLOADS'], current_user.username)
+        target_dir = 'app/journal/static/uploads/{}'.format(current_user.username)
         if not os.path.exists(target_dir):
             os.mkdir(target_dir)
+        #target_dir = os.path.join('/static/uploads/stake', current_user.username)
+        #target_dir = static_files()#os.path.join(url_for('static', filename=''), 'uploads',current_user.username)
+        #target_dir = os.path.join(current_app.config['MEDIA_UPLOADS'], current_user.username)
+        #if not os.path.exists(target_dir):
+        #    os.mkdir(target_dir)
         
         file_ext = os.path.splitext(filename)[1]
         
@@ -142,8 +152,8 @@ def upload_file(f_path, jrnl_entry, new_entry=True):
             return None#'{}: file type unsupported'.format(file_ext), 400
 
         elif new_entry:
-            
-            mf_path = os.path.join(current_app.config['MEDIA_UPLOADS'], current_user.username, filename)
+            mf_path  = os.path.join(target_dir, filename)
+            #mf_path = os.path.join(current_app.config['MEDIA_UPLOADS'], current_user.username, filename)
 
             new_media_item = Media(
                 media_file_path = mf_path,
@@ -162,7 +172,9 @@ def upload_file(f_path, jrnl_entry, new_entry=True):
             return 0
         
         else:
-            mf_path = os.path.join(current_app.config['MEDIA_UPLOADS'], current_user.username, filename)
+            mf_path  = os.path.join(target_dir, filename)
+            #flash("!" + mf_path)
+            #mf_path = os.path.join(current_app.config['MEDIA_UPLOADS'], current_user.username, filename)
             f_path.save(mf_path)
             #flash('file uploaded - edit')
 
@@ -232,12 +244,7 @@ def edit_entry(entry_id=None, media_id=None):
                         m_id.media_file_path = new_file
                         db.session.add(m_id)
                         db.session.commit()
-                        # flash(m_id.media_id)
-                        # flash(m_id.media_file_path)
-                        # flash(url_for('static', filename=m_id.media_file_path.replace('static', '!')))
-                        # flash(m_id.media_format)
-                        # db.session.add(upd_entry)
-                        # db.session.commit()
+
                 else:
                     # filename is the same as stored, do nothing
                     # TODO: check file attributes in case name is same but file is different
@@ -246,7 +253,7 @@ def edit_entry(entry_id=None, media_id=None):
 
                 new_file = upload_file(file, upd_entry, False)
                 if new_file is None:
-                    #flash("it's none - new media")
+
                     return render_template('journal/upd_entry.html', form=form)
                 else:
                     #flash(new_file)
@@ -261,7 +268,7 @@ def edit_entry(entry_id=None, media_id=None):
                     upd_entry.media_id = new_media.media_id # media_id back populates after commit
                     db.session.add(upd_entry)
                     db.session.commit()
-                    #flash(upd_entry.media_id)
+
                     m_id.media_id = new_media.media_id
         else:
             # no filename, but maybe that means no file attached?
@@ -290,3 +297,9 @@ def edit_entry(entry_id=None, media_id=None):
         pass
 
     return render_template('/journal/edit_entry.html', title='Cool', form=form, entry_id=entry_id, media_id=media_id)
+
+# @bp.route('/static_files')
+# @login_required
+# def static_files():
+#     darn_path = '/journal/static_files/uploads/{}'.format(current_user.username)
+#     return darn_path 

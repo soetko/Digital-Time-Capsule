@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "bootstrap_wtf.html" as wtf %}
 
 {% block content %}
     <h1>{{ ('Journal') }}</h1></br></br>
@@ -8,12 +9,13 @@
             <h6>published on: {{ journal_entry[item].date }}</h6> <br/><br/>
             <p> 
                 {% if journal_entry[item].image_name != 'blank' %}
-                {% set filePath = journal_entry[item].image_path.replace('static/', '')  %}
-                {% set fullPath = '{}{}'.format('', url_for('static', filename=filePath)) %}
+                {% set filePath = journal_entry[item].image_path.replace('app/journal/static/', '')  %}
+                {% set fullPath = url_for('static',filename=filePath) %}
                     
                     <div class="dj-3"><img src="{{ fullPath }}" style='width: 40%' alt="{{ fullPath }}">
                     </div>
-                    <br/>              
+                    <br/> 
+                    {{ filePath}}             
                 {% endif %}
                 {% for line in journal_entry[item].content.split('\n') %}
                     {{ line }}<br/>

@@ -23,7 +23,7 @@ import json
 from app.tags_generation.tags_generation import tags_generator
 
 
-@bp.route('/journal/', methods=['GET', 'POST'])#, enctype="multipart/form-data")
+@bp.route('/journal/', methods=['GET', 'POST'])
 @login_required
 def journal():
 
@@ -71,7 +71,7 @@ def journal():
 
 
 
-@bp.route('/new_entry', methods=['GET', 'POST'])#, enctype="multipart/form-data")
+@bp.route('/new_entry', methods=['GET', 'POST'])
 @login_required
 def new_entry():
     form = JournalEntryForm()
@@ -87,11 +87,11 @@ def new_entry():
         if file.filename != '':
             if upload_file(file, new_entry) is None:
                 flash("it's none")
-                return render_template('journal/new_entry.html', form=form)#redirect(request.referrer, form=form)
+                return render_template('journal/new_entry.html', form=form)
             return redirect(url_for('journal.journal'))            
         
         db.session.add(new_entry)
-        db.session.flush()  # To get the new_entry.entry_id immediately
+        db.session.flush() 
 
         tags_str = form.tags.data
         if tags_str:
@@ -105,7 +105,6 @@ def new_entry():
                     new_entry.tags.append(tag)
 
         db.session.commit()
-        #flash('New entry created.')
         return redirect(url_for('journal.journal'))    
     else:
         return render_template('journal/new_entry.html', form=form)
@@ -138,22 +137,16 @@ def upload_file(f_path, jrnl_entry, new_entry=True):
         target_dir = 'app/static/uploads/{}'.format(current_user.username)
         if not os.path.exists(target_dir):
             os.mkdir(target_dir)
-        #target_dir = os.path.join('/static/uploads/stake', current_user.username)
-        #target_dir = static_files()#os.path.join(url_for('static', filename=''), 'uploads',current_user.username)
-        #target_dir = os.path.join(current_app.config['MEDIA_UPLOADS'], current_user.username)
-        #if not os.path.exists(target_dir):
-        #    os.mkdir(target_dir)
         
         file_ext = os.path.splitext(filename)[1]
         
         # NEED TO UPDATE THIS AND NEW_ENTRY?
         if file_ext not in current_app.config['ALLOWED_EXTENSIONS']:
             flash('{}: file type unsupported'.format(file_ext))
-            return None#'{}: file type unsupported'.format(file_ext), 400
+            return None
 
         elif new_entry:
             mf_path  = os.path.join(target_dir, filename)
-            #mf_path = os.path.join(current_app.config['MEDIA_UPLOADS'], current_user.username, filename)
 
             new_media_item = Media(
                 media_file_path = mf_path,
@@ -161,7 +154,6 @@ def upload_file(f_path, jrnl_entry, new_entry=True):
             )
 
             f_path.save(mf_path)
-            #flash('file uploaded')
 
             db.session.add(new_media_item)
             db.session.commit()
@@ -173,10 +165,7 @@ def upload_file(f_path, jrnl_entry, new_entry=True):
         
         else:
             mf_path  = os.path.join(target_dir, filename)
-            #flash("!" + mf_path)
-            #mf_path = os.path.join(current_app.config['MEDIA_UPLOADS'], current_user.username, filename)
             f_path.save(mf_path)
-            #flash('file uploaded - edit')
 
             return mf_path
 
@@ -187,7 +176,7 @@ def upload_file(f_path, jrnl_entry, new_entry=True):
         2. Display text with the filename below it
         3. ??
 """
-@bp.route('/edit_entry/<int:entry_id>', methods=['GET', 'POST'])#, enctype="multipart/form-data")
+@bp.route('/edit_entry/<int:entry_id>', methods=['GET', 'POST'])
 @login_required
 def edit_entry(entry_id=None, media_id=None):    
     form = EditJournalEntryForm(enctype="multipart/form-data")
@@ -231,7 +220,7 @@ def edit_entry(entry_id=None, media_id=None):
             if m_id is not None:
                 og_fpath = m_id.media_file_path
                 og_fname = og_fpath.split('/')[-1]
-                #media_entry = m_id#db.first_or_404(sa.select(Media).where(Media.media_id == m_id))
+
                 if og_fname != file.filename:
                     new_file = upload_file(file, upd_entry, False)
                     if new_file is None:
@@ -278,7 +267,6 @@ def edit_entry(entry_id=None, media_id=None):
         if upd_entry is not None and m_id is None and media_id is None:
             db.session.add(upd_entry)
             db.session.commit()
-            #flash('New entry created.')
             
         return redirect(url_for('journal.journal'))    
 
@@ -298,8 +286,3 @@ def edit_entry(entry_id=None, media_id=None):
 
     return render_template('/journal/edit_entry.html', title='Cool', form=form, entry_id=entry_id, media_id=media_id)
 
-# @bp.route('/static_files')
-# @login_required
-# def static_files():
-#     darn_path = '/journal/static_files/uploads/{}'.format(current_user.username)
-#     return darn_path 

@@ -7,6 +7,7 @@
         {% for item in journal_entry %}                  
             <h4>{{ journal_entry[item].title }}</h4><br/><br/>
             <h6>published on: {{ journal_entry[item].date }}</h6> <br/><br/>
+            
             <p> 
                 {% if journal_entry[item].image_name != 'blank' %}
                 {% set filePath = journal_entry[item].image_path.replace('app/static/', '')  %}

@@ -245,7 +245,6 @@ def edit_entry(entry_id=None, media_id=None):
 
                     return render_template('journal/upd_entry.html', form=form)
                 else:
-                    #flash(new_file)
                     new_media = Media(
                         media_file_path = new_file,
                         media_format = os.path.splitext(new_file.split('/')[-1])[1]

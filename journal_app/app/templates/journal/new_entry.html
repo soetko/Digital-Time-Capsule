@@ -12,18 +12,19 @@
         </tr>
     </div>
 {% endblock %}
-
 {% block scripts %}
     {{ super() }}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const generateTagsButton = document.getElementById('generate_tags');
             const contentField = document.getElementById('content'); 
-            const tagsField = document.getElementById('tags');       
+            const tagsField = document.getElementById('tags');
+            //const titleField = document.getElementById('title');
 
             if (generateTagsButton && contentField && tagsField) {
                 generateTagsButton.addEventListener('click', function() {
                     const content = contentField.value;
+                    titleField.value = JSON.stringify({'content':content})
                     fetch('/journal/generate_entry_tags', {
                         method: 'POST',
                         headers: {

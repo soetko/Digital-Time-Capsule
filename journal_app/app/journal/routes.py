@@ -207,6 +207,7 @@ def edit_entry(entry_id=None, media_id=None):
                     if not tag:
                         tag = Tag(tag_name=tag_name)
                         db.session.add(tag)
+                    db.session.commit()
                     new_tags.append(tag)
             #flash(new_tags)           
             upd_entry = db.first_or_404(sa.select(JournalEntry)
@@ -286,12 +287,13 @@ def edit_entry(entry_id=None, media_id=None):
                 .where(JournalEntry.entry_id == entry_id and JournalEntry.user_id == current_user.user_id))
             form.title.data = entry.entry_title
             form.content.data = entry.entry_body
-            form.tags.data = entry.tags
+            if entry.tags:
+                form.tags.data = ', '.join([tag.tag_name for tag in entry.tags])
             media_id = entry.media_id
-            form.tags.data = ', '.join([tag.tag_name for tag in entry.tags])
+            
     else:
         "Probably better to redirect"
         pass
 
-    return render_template('/journal/edit_entry.html', title='Cool', form=form, entry_id=entry_id, media_id=media_id)
+    return render_template('/journal/edit_entry.html', title='Edit Journal Entry', form=form, entry_id=entry_id, media_id=media_id)
 

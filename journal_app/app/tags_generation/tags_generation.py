@@ -38,11 +38,11 @@ def tags_generator(text):
         fails or input is invalid.
     """
     if classifier is None:
-        return []
+        return ['NO', 'CLASSIFIER']
     if not isinstance(text, str):
-        return []
+        return ['NO', 'INSTANCE']
     if not text.strip():
-        return []
+        return ['NOT', 'TEXT']
     
     candidate_tags = ["Daily Reflection", "Gratitude", "Mood", "Feelings", "Thoughts",
                       "Emotions", "Day in Review", "Morning", "Evening", "Night",
@@ -56,7 +56,9 @@ def tags_generator(text):
                       "Happiness", "Joy", "Sadness", "Hope", "Reflection"]
     try:
         prediction = classifier(text, candidate_tags, hypothesis_template="{}", multi_label=True)
+        if len(prediction) == 0:
+            prediction = ['LEN', 'ZERO']
     except Exception:
-        return []
+        return ['THIS', 'EXCEPTION']
     top_3_tags = prediction['labels'][:3]
     return top_3_tags

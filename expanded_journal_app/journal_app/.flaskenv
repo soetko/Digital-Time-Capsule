@@ -1,1 +1,0 @@
-FLASK_APP = journal_app.py

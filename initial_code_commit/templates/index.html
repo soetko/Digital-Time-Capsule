@@ -1,8 +1,0 @@
-{% extends "base.html" %}
-
-{% block content %}
-    <h1>Hi, {{ current_user.username }}!</h1>
-    {% for entry in entries %}
-    <div><p><b>{{ entry.journal_title }}:</b></br>{{ entry.body }}</p></div>
-    {% endfor %}
-{% endblock %}

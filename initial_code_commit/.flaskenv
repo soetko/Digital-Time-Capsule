@@ -1,2 +1,0 @@
-FLASK_APP=journal.py
-FLASK_ENV=development

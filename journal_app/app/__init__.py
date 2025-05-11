@@ -5,7 +5,7 @@ from flask_migrate import Migrate
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
-from flask_bootstrap import Bootstrap5
+from flask_bootstrap5 import Bootstrap
 from werkzeug.utils import secure_filename
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
@@ -17,7 +17,7 @@ migrate = Migrate()
 login = LoginManager()
 login.login_view = 'auth.login'
 login.login_message = 'Log in required.'
-bootstrap = Bootstrap5()
+bootstrap = Bootstrap()
 
 def create_app(config_class=Config):
     app = Flask(__name__, static_folder='static',static_url_path='/app/static/')
@@ -58,6 +58,10 @@ def create_app(config_class=Config):
 
         app.logger.setLevel(logging.INFO)
         app.logger.info('Digital-Journal-App startup')
+
+    @app.context_processor
+    def inject_bootstrap():
+        return dict(bootstrap=bootstrap)
 
     return app
 

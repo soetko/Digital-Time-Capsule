@@ -57,6 +57,6 @@ def tags_generator(text):
     try:
         prediction = classifier(text, candidate_tags, hypothesis_template="{}", multi_label=True)            
     except Exception:
-        return ['THIS', 'EXCEPTION']
+        return
     top_3_tags = prediction['labels'][:3]
     return top_3_tags

@@ -1,7 +1,50 @@
 {% extends "base.html" %}
+{% block body_class %}paper-page{% endblock %}
 {% import "bootstrap_wtf.html" as wtf %}
-
 {% block content %}
-    <h1>Hi, {{ current_user.username }}!</h1>
-    <div><p><b>"We have nothing noteworthy here"</p></div>
+<div class="container mt-5 text-center">
+    <div class="welcome-banner text-center p-5 rounded-4 shadow-sm">
+        <h1 class="display-4 fw-bold mb-3">Welcome back, {{ current_user.username }}!</h1>
+        <p class="lead fst-italic text-muted">Your memories are waiting to be written.</p>
+    </div>
+    </p>
+    <div class="d-flex justify-content-center mt-4">
+        <div class="card text-center p-4 shadow-sm" style="max-width: 400px;">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-journal-x"></i> No Entries Yet</h5>
+                <p class="card-text">Looks like you haven't written anything yet.</p>
+                <a href="{{ url_for('journal.new_entry') }}" class="btn btn-lightskyblue">Create Your First Entry</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center gap-3 mt-4">
+        <div class="col-auto">
+            <a href="{{ url_for('journal.journal') }}" class="btn btn-lightskyblue">View Journal</a>
+            <a href="{{ url_for('journal.new_entry') }}" class="btn btn-lightskyblue">New Entry</a>
+        </div>
+    </div>
+    <div class="container mt-5">
+    <div id="carouselScrapbookSlide" class="carousel scrapbook slide" data-bs-ride="scrapbook examples">
+        <div class="carousel-inner rounded shadow">
+            <div class="carousel-item active">
+                <img src="{{ url_for('static', filename='uploads/winnie/scrapbook1.jpg') }}" class="d-block w-100" alt="Scrapbook page 1">
+            </div>
+            <div class="carousel-item">
+                <img src="{{ url_for('static', filename='uploads/winnie/scrapbook2.jpg') }}" class="d-block w-100" alt="Scrapbook page 2">
+            </div>
+            <div class="carousel-item">
+                <img src="{{ url_for('static', filename='uploads/winnie/scrapbook3.jpg') }}" class="d-block w-100" alt="Scrapbook page 3">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselScrapbookSlide" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselScrapbookSlide" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
 {% endblock %}

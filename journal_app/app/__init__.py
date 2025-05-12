@@ -16,7 +16,8 @@ db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
 login.login_view = 'auth.login'
-login.login_message = 'Log in required.'
+login.login_message = 'Please log in to view your journal'
+login.login_message_category = 'info'
 bootstrap = Bootstrap()
 
 def create_app(config_class=Config):

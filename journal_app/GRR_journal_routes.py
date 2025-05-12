@@ -92,7 +92,7 @@ def journal():
     if len(journal_entries) == 0:
         journal_entries.append({'one':{'title': 'your title here', 'date': 'when created?', 'content': 'what would you write?'}})
         journal_entries.append({'two':{'title': 'your title here', 'date': 'when created?', 'content': 'what would you write?'}})
-        flash('You have no journal entries yet! Perhaps you should create one now..')
+        flash('You have no journal entries yet! Perhaps you should create one now..', 'info')
 
     #flash(journal_entries)
     return render_template('journal/journal.html', journal_entries=journal_entries)#render_template('journal/journal.html', journal_entries=journal_entries) #, media_files=media_files)
@@ -180,7 +180,7 @@ def upload_file(f_path, jrnl_entry, new_entry=True):
             )
 
             f_path.save(mf_path)
-            flash('file uploaded')
+            flash('File Uploaded Successfully!', 'success')
 
             db.session.add(new_media_item)
             db.session.commit()
@@ -191,7 +191,7 @@ def upload_file(f_path, jrnl_entry, new_entry=True):
         else:
             mf_path = os.path.join(user_upload_dir, filename)
             f_path.save(mf_path)
-            flash('file uploaded')
+            flash('File Uploaded Successfully!', 'success')
 
     #else:
             return redirect(url_for('journal.new_entry'))

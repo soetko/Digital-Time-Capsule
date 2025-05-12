@@ -45,7 +45,7 @@ def journal():
 
         journal_entry[the_key] = {
             'title': entry.entry_title,
-            'date': pd.to_datetime(entry.entry_published).strftime('%B %d, %Y at %H:%M GMT'),
+            'date': pd.to_datetime(entry.entry_published),
             'image_path': ['blank', entry.media_id][0 if entry.media_id is None else 1],
             'content': entry.entry_body,
             'tags': tags.copy()

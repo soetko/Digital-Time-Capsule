@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileRequired
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from werkzeug.utils import secure_filename
 from wtforms import StringField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError, EqualTo, Length
@@ -13,7 +13,7 @@ from app.journal import bp
 
 class JournalEntryForm(FlaskForm):
     title = StringField(('Title'), validators=[DataRequired()])
-    media_file = FileField()
+    media_file = FileField('Media File', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif', 'mp4'])])
     content = TextAreaField('Content', validators=[DataRequired()])
     tags = StringField('Tags (comma-separated)')#, render_kw={'readonly': True})
     submit = SubmitField('Save')

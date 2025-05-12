@@ -1,38 +1,47 @@
 {% extends "base.html" %}
 {% block body_class %}paper-page{% endblock %}
 {% import "bootstrap_wtf.html" as wtf %}
+
 {% block content %}
-    <h1>{{ ('Journal') }}</h1></br></br>
-    {% for journal_entry in journal_entries %}</br>
-        {% for item in journal_entry %}                  
-            <h4>{{ journal_entry[item].title }}</h4><br/><br/>
-            <h6>published on: {{ journal_entry[item].date }}</h6> <br/><br/>
-            <p> 
-                {% if journal_entry[item].image_name != 'blank' %}
-                {% set filePath = journal_entry[item].image_path.replace('app/static/', '')  %}
-                {% set fullPath = url_for('static',filename=filePath) %}
+<h1 class="text-center my-4 entry-title">My Journals</h1>
+
+<div class="container">
+    {% for journal_entry in journal_entries %}
+        {% for item, entry in journal_entry.items() %}
+            <div class="card p-4 mb-4 shadow-sm">
+                <h4>{{ entry.title }}</h4>
+                <small class="text-muted">Published on: {{ entry.date.strftime('%B %d, %Y at %I:%M %p') }}</small>
+
+                {% if entry.image_name != 'blank' %}
+                    {% set filePath = entry.image_path.replace('app/static/', '').replace('\\', '/') %}
+                    {% set fullPath = url_for('static', filename=filePath) %}
                     {% if fullPath != '/app/static/blank' %}
-                        <div class="dj-3">
-                            <img src="{{ fullPath }}" style='width: 40%' alt="{{ fullPath }}">
+                        <div class="my-3">
+                            <img src="{{ fullPath }}" alt="Journal Image" class="img-fluid rounded" style="max-width: 50%;">
                         </div>
                     {% endif %}
-                    <br/>           
                 {% endif %}
-                {% for line in journal_entry[item].content.split('\n') %}
-                    {{ line }}<br/>
-                {% endfor %}
-            </p>
-            {% if journal_entry[item].get('tags') %}
-                <p>
-                    Tags:
-                    {% for tag in journal_entry[item].tags %}
-                        <span class="badge bg-secondary">{{ tag }}</span>
+
+                <div class="mt-3">
+                    {% for line in entry.content.split('\n') %}
+                        <p>{{ line }}</p>
                     {% endfor %}
-                </p>
-            {% endif %}
-            <div align="right">
-                <p><a href="{{ url_for('.edit_entry', entry_id=item) }}">edit</a></p><br/><hr/>
+                </div>
+
+                {% if entry.get('tags') %}
+                    <p class="mt-3">
+                        Tags:
+                        {% for tag in entry.tags %}
+                            <span class="badge bg-secondary">{{ tag }}</span>
+                        {% endfor %}
+                    </p>
+                {% endif %}
+
+                <div class="d-flex justify-content-end mt-3">
+                    <a href="{{ url_for('journal.edit_entry', entry_id=item) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                </div>
             </div>
         {% endfor %}
     {% endfor %}
+</div>
 {% endblock %}

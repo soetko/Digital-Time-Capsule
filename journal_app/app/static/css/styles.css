@@ -1,0 +1,150 @@
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body.login-page .page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: transparent;  /* Ensure no background leaks through */
+}
+
+body.login-page .btn-primary {
+    background-color: #3399ff !important;
+    border-color: #3399ff !important;
+    color: white;
+}
+
+.background-wrapper {
+    background: url('/app/static/uploads/winnie/journal-background.jpg') no-repeat center top fixed;
+    background-size: cover;
+    background-position: center 56px;  /* Shift image down by navbar height */
+    min-height: calc(100vh - 56px);    /* Fill screen minus navbar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: transparent;
+}
+
+.login-form-container {
+    background-color: transparent !important;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    max-width: 400px;
+    width: 100%;
+    z-index: 10;
+}
+
+/* NAVBAR STYLING */
+nav.navbar {
+    background-color: white !important;
+}
+
+.alert {
+    width: 100vw;
+    margin: 0 auto;
+    padding: 1.2rem 2.5rem;
+    font-size: 1.5rem;
+    border-radius: 0;
+    text-align: center;
+    color: white;
+}
+
+.alert-info    { background-color: lightskyblue; }
+.alert-success { background-color: #4caf50; }
+.alert-warning { background-color: #ff9800; }
+.alert-danger  { background-color: #f44336; }
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    padding: 10px;
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.site-footer {
+    background-color: lightskyblue;
+    color: white;
+    padding: 0.6rem;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.btn-lightskyblue {
+    background-color: #87CEFA;
+    border-color: #87CEFA;
+    color: white;
+    font-size: 1.25rem;         
+    padding: 0.75rem 1.5rem;    
+    border-radius: 0.5rem;      
+}
+
+.btn-lightskyblue:hover {
+    background-color: #68bde8;
+    border-color: #68bde8;
+    color: white;
+}
+
+.site-footer {
+    background-color: lightskyblue;
+    color: white;
+    padding: 0.6rem;
+    font-size: 0.9rem;
+    text-align: center;
+    width: 100vw;        
+    margin: 0;
+    position: relative;   
+    left: 0;
+}
+
+body.paper-page {
+    background-color: #BCD4E6;
+    background-image: url('/app/static/uploads/winnie/purty-wood-beau.png');
+    background-repeat: repeat;
+    background-size: auto;
+}
+
+.welcome-banner {
+    background-color: rgba(255, 255, 255, 0.8); 
+    max-width: 800px;
+    margin: 3rem auto 2rem;
+    backdrop-filter: blur(4px); 
+    border: 2px solid rgba(0, 0, 0, 0.05);
+    font-family: 'Lora', serif;
+    color: #2c3e50;
+    text-align: center;
+    padding: 2rem;
+    border-radius: 1rem;
+}
+
+.welcome-banner h1 {
+    font-weight: 600;
+    font-size: 2.5rem;
+    color: #2c3e50;
+}
+
+.welcome-banner p {
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: #5c6f7b;
+    font-style: italic;
+    margin-top: 0.5rem;
+}
+
+

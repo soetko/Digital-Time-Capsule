@@ -1,1 +1,2 @@
-FLASK_APP = journal_app.py
+FLASK_APP=journal_app
+FLASK_ENV=development

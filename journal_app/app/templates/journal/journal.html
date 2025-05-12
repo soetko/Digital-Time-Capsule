@@ -1,6 +1,6 @@
 {% extends "base.html" %}
+{% block body_class %}paper-page{% endblock %}
 {% import "bootstrap_wtf.html" as wtf %}
-
 {% block content %}
     <h1>{{ ('Journal') }}</h1></br></br>
     {% for journal_entry in journal_entries %}</br>

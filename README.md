@@ -38,7 +38,6 @@ Make sure you have Python 3.8+ installed, then clone this repository and run:
 
 ```bash
 pip install -r requirements.txt
-'
 
 ## ⚙️ Running the App
 

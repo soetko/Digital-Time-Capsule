@@ -31,6 +31,7 @@ Whether you’re journaling privately, building a collaborative scrapbook, or pr
 - **Backend:** Flask  
 - **Templating Engine:** Jinja  
 - **Frontend:** HTML, CSS, JavaScript  
+- **Database:** SQLite
 
 ## Installation
 

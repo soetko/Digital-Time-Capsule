@@ -39,3 +39,20 @@ Make sure you have Python 3.8+ installed, then clone this repository and run:
 ```bash
 pip install -r requirements.txt
 
+## ⚙️ Running the App
+
+To start the Flask development server:
+
+```bash
+flask run
+
+## 👥 Contributors
+
+- Rashmikaben Patel  
+- Matthew Sabel  
+- Jonathan Byars  
+- Soe Ko  
+- Peter Mansfield  
+- Ian Pontius
+
+

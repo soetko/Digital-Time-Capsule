@@ -4,14 +4,27 @@ Digital-Time-Capsule is a customizable digital journal and scrapbook platform de
 
 Whether you’re journaling privately, building a collaborative scrapbook, or preserving memories in a digital time capsule, this platform puts privacy and control back in your hands—offering offline use, flexible export options, and zero targeted ads.
 
-## Features
+## Current Features
 
--  Rich-text journaling with photo attachments  
--  AI-powered content suggestions and photo enhancement  
--  Scrapbook-style layouts and custom templates  
+-  Journaling with photo attachments and a description
+-  User Account Features
+-  Text and Image Handling
 -  Full data privacy (no targeted ads or third-party data use)  
--  Export and share entries on your terms  
--  Expandable to group scrapbooks or long-term time capsules  
+-  PDF Exporting and Link Sharing 
+-  AI functionality for organization and post tagging
+
+## Planned Features
+
+- Multi-project management  
+- Social media post integration  
+- GIF and video handling  
+- Collaborative user editing and project link sharing  
+- Web interface design improvements  
+- Voice transcription  
+- Mobile app
+- Localized AI for customization  
+- Drag and drop functionality for scrapbooking  
+- More advanced text and image handling  
 
 ## Built With
 

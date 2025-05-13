@@ -41,10 +41,17 @@ pip install -r requirements.txt
 ```
 ## ⚙️ Running the App
 
-To start the Flask development server:
+To initialize the development server:
 
 ```bash
+flask db migrate -m "Initial migration"
+flask db upgrade
+```
+
+Then to start your Flask server, run:
+```bash
 flask run
+```
 
 ## 👥 Contributors
 

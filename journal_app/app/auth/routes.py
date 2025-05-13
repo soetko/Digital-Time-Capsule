@@ -8,6 +8,8 @@ from app.models import User
 from datetime import datetime, timezone
 from app.auth import bp
 
+""" Registration and user log-in related routes """
+
 @bp.route('/test_login', methods=['GET', 'POST'])
 def test_login():
     response = login_user(user, remember=form.remember_me.data)

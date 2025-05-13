@@ -7,15 +7,13 @@ from flask_login import UserMixin, current_user
 from app import db, login
 from hashlib import md5
 
-
+""" Definition of classes / tables related to users and JournalEntries """
 class User(UserMixin, db.Model):
-    #__tablename__ = 'user'
     user_id: so.Mapped[int] = so.mapped_column(primary_key=True)
     username: so.Mapped[str] = so.mapped_column(sa.String(64), index=True, unique=True)
     email: so.Mapped[str] = so.mapped_column(sa.String(128), index=True, unique=True)
     password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
     journal_entries: so.WriteOnlyMapped['JournalEntry'] = so.relationship(back_populates='author')
-    #about_me: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
     last_login: so.Mapped[Optional[datetime]] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
 
     def set_user_upload_directory(self):
@@ -26,7 +24,6 @@ class User(UserMixin, db.Model):
 
     def get_id(self):
         return self.user_id
-
 
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
@@ -42,20 +39,16 @@ class User(UserMixin, db.Model):
 def load_user(user_id):
     return db.session.get(User, int(user_id))
 
-## Excluding location field for current iteration
-## Limiting journal size to 64k bytes, but can use mediumtext equiv 
-## for production [String(16777215) = 16MB allocated per entry]
-## alternatively, could store entries on disk and link filepath (like media)
 
 class Media(db.Model):
     media_id: so.Mapped[int] = so.mapped_column(primary_key=True)
     media_uploaded_date: so.Mapped[datetime] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
-    # media file size would be good to add
     media_format: so.Mapped[str] = so.mapped_column(sa.String(10))
     media_file_path: so.Mapped[str] = so.mapped_column(sa.String(256))
 
     def __repr__(self):
         return '<Media {}>'.format(self.media_id)    
+
 
 class JournalEntry(db.Model):
     entry_id: so.Mapped[int] = so.mapped_column(primary_key=True)
@@ -67,7 +60,6 @@ class JournalEntry(db.Model):
     last_mod_date: so.Mapped[datetime] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
     author: so.Mapped[User] = so.relationship(back_populates='journal_entries')
     tags: so.Mapped[list['Tag']] = so.relationship(secondary='journal_entry_tag', backref=so.backref('journal_entries', lazy='dynamic'))
-    #about_me: so.Mapped[User] = so.relationship()
 
     def __repr__(self):
         return '<JournalEntry {}>'.format(self.entry_title)
@@ -75,10 +67,11 @@ class JournalEntry(db.Model):
 
 class Tag(db.Model):
     tag_id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    tag_name: so.Mapped[int] = so.mapped_column(sa.String(256))
+    tag_name: so.Mapped[str] = so.mapped_column(sa.String(256))
 
     def __repr__(self):
         return '<Tag {}>'.format(self.tag_name)
+
 
 class JournalEntryTag(db.Model):
     entry_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(JournalEntry.entry_id), primary_key=True)
@@ -87,6 +80,7 @@ class JournalEntryTag(db.Model):
     def __repr__(self):
         return '<JournalEntryTag {}, {}>'.format(self.entry_id, self.tag_id)
 
+""" Not currently used """
 class JournalEntryMedia(db.Model):
     entry_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(JournalEntry.entry_id), primary_key=True)
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.user_id), primary_key=True)

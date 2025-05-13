@@ -44,7 +44,7 @@ body.login-page .btn-primary {
     border-radius: 12px;
     padding: 2rem;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-    max-width: 400px;
+    /*max-width: 400px;*/
     width: 100%;
     z-index: 10;
 }
@@ -179,7 +179,7 @@ textarea {
 }
 
 /* Submit Button */
-button[type="submit"] {
+button[type="any"] {
     margin-top: 1.5rem;
     background-color: #007bff;
     color: white;

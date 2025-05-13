@@ -8,7 +8,7 @@
         <p class="lead fst-italic text-muted">Your memories are waiting to be written.</p>
     </div>
     </p>
-    <div class="d-flex justify-content-center mt-4">
+ <!--   <div class="d-flex justify-content-center mt-4">
         <div class="card text-center p-4 shadow-sm" style="max-width: 400px;">
             <div class="card-body">
                 <h5 class="card-title"><i class="bi bi-journal-x"></i> No Entries Yet</h5>
@@ -17,14 +17,15 @@
             </div>
         </div>
     </div>
+--->
 
     <div class="row justify-content-center gap-3 mt-4">
         <div class="col-auto">
-            <a href="{{ url_for('journal.journal') }}" class="btn btn-lightskyblue">View Journal</a>
-            <a href="{{ url_for('journal.new_entry') }}" class="btn btn-lightskyblue">New Entry</a>
+            <a href="{{ url_for('journal.journal') }}" class="btn btn-lightskyblue" style="float:left; margin-left:-25%;width:60%;">View Journal</a>
+            <a href="{{ url_for('journal.new_entry') }}" class="btn btn-lightskyblue"  style="float:right; margin-right:-25%;width:60%;">New Entry</a>
         </div>
     </div>
-    <div class="container mt-5">
+    <div class="container mt-5" style="margin-bottom:1%;">
     <div id="carouselScrapbookSlide" class="carousel scrapbook slide" data-bs-ride="scrapbook examples">
         <div class="carousel-inner rounded shadow">
             <div class="carousel-item active">
@@ -46,5 +47,5 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-</div>
+    </div>
 {% endblock %}

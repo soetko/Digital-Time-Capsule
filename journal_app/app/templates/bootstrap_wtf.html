@@ -94,9 +94,9 @@
   <div class="dj-3">
     {{ field.label(class='form-label') }}
     {% if autofocus %}
-      {{ field(class='form-control' + (' is-invalid' if field.errors else ''), autofocus=True, style="height: 300px; width: 90%;") }}
+      {{ field(class='form-control' + (' is-invalid' if field.errors else ''), autofocus=True, style="height: 300px; width: 100%;") }}
     {% else %}
-      {{ field(class='form-control' + (' is-invalid' if field.errors else ''), style="height: 300px; width: 90%;") }}
+      {{ field(class='form-control' + (' is-invalid' if field.errors else ''), style="height: 300px; width: 100%;") }}
     {% endif %}
     {%- for error in field.errors %}
     <div class="invalid-feedback">{{ error }}</div>
@@ -109,9 +109,9 @@
   <div class="dj-3">
     {{ field.label(class='form-label') }}
     {% if autofocus %}
-      {{ field(class='form-control' + (' is-invalid' if field.errors else ''), autofocus=True, style="width: 90%;") }}
+      {{ field(class='form-control' + (' is-invalid' if field.errors else ''), autofocus=True, style="width: 100%;") }}
     {% else %}
-      {{ field(class='form-control' + (' is-invalid' if field.errors else ''), style="width: 90%;") }}
+      {{ field(class='form-control' + (' is-invalid' if field.errors else ''), style="width: 100%;") }}
     {% endif %}
     {%- for error in field.errors %}
     <div class="invalid-feedback">{{ error }}</div>

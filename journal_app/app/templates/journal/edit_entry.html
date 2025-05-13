@@ -3,51 +3,84 @@
 {% import "bootstrap_wtf.html" as wtf %}
 
 {% block content %}
-<h1 class="entry-title">Edit Journal Entry</h1>
-
-<form method="POST" enctype="multipart/form-data">
-    {{ form.hidden_tag() }}
-    {{ wtf.form_field(form.title) }}
-    {{ wtf.form_field(form.media_file) }}
-    {{ wtf.form_field(form.content) }}
-    {{ wtf.form_field(form.tags) }}
-
-    <div class="d-flex justify-content-between align-items-center mt-4">
-        <div>
-            <span class="me-2 fw-semibold">Try our AI Features:</span>
-            <button type="button" id="generate_tags" class="btn btn-outline-primary">Generate Tags</button>
+    <h1 class="entry-title">Edit Journal Entry</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        {{ wtf.form_field_edit(form.title) }}
+        {{ wtf.form_field_edit(form.media_file) }}
+        {{ wtf.form_field_edit(form.content) }}
+        {{ wtf.form_field_edit(form.tags) }}   
+        <div class="d-flex justify-content-between align-items-center mt-4"><p style="color:dodgerblue;margin-bottom:-5%;margin-top:-5%;" id="running-notice"></p></div>
+        <div class="d-flex justify-content-between align-items-center mt-4">            
+            <tr>
+                <td scope="col">
+                    <span class="me-2 fw-semibold" style='float:right;margin-top:3.5%;margin-bottom:3%;margin-left:22%;margin-right:-25%'>Try our AI Features:</span>
+                </td>
+                <td scope="col">
+                    <span class="me-2 fw-semibold" style='float:right;margin-top:5%;margin-bottom:5%;margin-left:-10%;'></span>
+                </td>
+            </tr>
+            <tr>
+                <td scope='col'>
+                    <button type="button" id="generate_tags" class="btn btn-outline-primary" style='float:right; margin-right:8%;margin-left:-5%;'>
+                        Generate Tags
+                    </button>
+                </td>
+                <td scope="col">
+                    <button type="submit" id='submit' class="btn btn-outline-primary" style='float:right; margin-right:2%;width:15%;'>Save</button>
+                </td>                               
+            </tr>
         </div>
-        <button type="submit" class="btn btn-primary">Save</button>
-    </div>
-</form>
+    </form>
+    
 {% endblock %}
 
 {% block scripts %}
 {{ super() }}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const generateTagsButton = document.getElementById('generate_tags');
-        const contentField = document.getElementById('content');
-        const tagsField = document.getElementById('tags');
+        document.addEventListener('DOMContentLoaded', function() {
+            const generateTagsButton = document.getElementById('generate_tags');
+            const contentField = document.getElementById('content'); 
+            const tagsField = document.getElementById('tags');
+            const runningMssg = document.getElementById('running-notice')
 
-        if (generateTagsButton && contentField && tagsField) {
-            generateTagsButton.addEventListener('click', function () {
-                const content = contentField.value;
-                fetch('/journal/generate_entry_tags', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ 'content': content })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.tags) {
-                        tagsField.value = data.tags.join(', ');
-                    }
+            if (generateTagsButton && contentField && tagsField) {
+                generateTagsButton.addEventListener('click', function() {
+                    runningMssg.innerText = 'Generating Tags';
+                    setInterval(changeText, 1800);
+                    const content = contentField.value;
+                    fetch('/journal/generate_entry_tags', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ 'content': content })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.tags) {
+                            tagsField.value = data.tags.join(', ');
+                            runningMssg.innerText = 'Tags generated!';
+                            setTimeout(hideText, 4000);
+                        } else {
+                            runningMssg.innerText = 'error - unspecified';
+                        }
+                    });
                 });
-            });
+            }
+        });
+        let countDots = 0;
+        function changeText() {
+            let cycleMssg = document.getElementById('running-notice');
+            if (cycleMssg.innerText != '' && cycleMssg.innerText != 'Tags generated!') {
+                let dotCount = countDots++ % 3;
+                let dots = ['.', '..', '...'];
+                const baseText = 'Generating Tags';
+                cycleMssg.innerText = baseText + dots[dotCount];
+            }           
         }
-    });
-</script>
+        function hideText() {
+            document.getElementById('running-notice').innerText = '';
+        }
+    </script>
 {% endblock %}

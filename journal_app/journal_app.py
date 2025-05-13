@@ -10,13 +10,8 @@ app = create_app()
 
 #auto-generate db
 with app.app_context():
-    db.drop_all()
+#    db.drop_all()
     db.create_all()
-
-#or destry all
-# with app.app_context():
-#     db.drop_all()
-#     db.create_all()
 
 @app.shell_context_processor
 def make_shell_context():

@@ -23,19 +23,23 @@ import json
 from app.tags_generation.tags_generation import tags_generator
 
 
+""" Route for displaying a user's journal entries. This also passes
+    journal entry ids to the edit hyperlink allowing for a signed in
+    user to edit an existing journal entry. Currently shows all 
+    user journal entries in one page, which can be cumbersome.
+    TODO: Add pagination, let user select how many entries to 
+    show at one time.
+"""
 @bp.route('/journal/', methods=['GET', 'POST'])
 @login_required
 def journal():
 
-    
+    # Checks if user has created their first journal entry
+    # this helps prevent errors when trying to display a journal page
+    # with no journal entries
     test_entry_exists()
+    
     entries = JournalEntry.query.filter_by(user_id=current_user.user_id).order_by(JournalEntry.entry_published.desc()).all()
-
-    query = sa.select(Tag)
-    tags = db.session.scalars(query).all()
-    #for x in tags:
-    #    flash(x)
-
 
     journal_entries = []
     for entry in entries:
@@ -70,7 +74,15 @@ def journal():
 
 
 
-
+""" Route for new journal entry. Title, Body, File attachment, and 
+    Tag generation of body supported. Audio transcription implementation
+    did not make it into this version due to current interface constraints.
+    Tag field supports user entered tags or auto generated tags. Currently,
+    user can add tag generations without using the zero shot tagging 
+    functionality, or add them into addition to auto Tag generation.
+    TODO (both new and edit): Markup implementaiton for journal entries,
+    allowing for HTML / CSS element rendering (bold, italics, font, color, etc.)
+"""
 @bp.route('/new_entry', methods=['GET', 'POST'])
 @login_required
 def new_entry():
@@ -81,20 +93,15 @@ def new_entry():
             user_id = current_user.user_id,            
             entry_title=form.title.data,
             media_id=None,
-            entry_body=form.content.data#.replace('\n', '<br/>')
+            entry_body=form.content.data
         )
-        file = request.files['media_file']
-        if file.filename != '':
-            if upload_file(file, new_entry) is None:
-                flash("it's none")
-                return render_template('journal/new_entry.html', form=form)
-            return redirect(url_for('journal.journal'))            
         
         db.session.add(new_entry)
-        db.session.commit()
-        #db.session.flush() 
+        db.session.flush()
 
         tags_str = form.tags.data
+        new_entry.tags = list()
+        my_tags = list()
         if tags_str:
             tags_list = [tag.strip() for tag in tags_str.split(',')]
             for tag_name in tags_list:
@@ -103,8 +110,19 @@ def new_entry():
                     if not tag:
                         tag = Tag(tag_name=tag_name)
                         db.session.add(tag)
-                        new_entry.tags.append(tag)
                         db.session.commit()
+                    new_entry.tags.append(tag)
+
+        db.session.add(new_entry)
+        db.session.commit()
+
+
+        file = request.files['media_file']
+        if file.filename != '':
+            if upload_file(file, new_entry) is None:
+                flash("it's none")
+                return render_template('journal/new_entry.html', form=form)
+
         
         return redirect(url_for('journal.journal'))    
     else:
@@ -117,17 +135,25 @@ def test_entry_exists():
         flash('no entries yet!')
         return(render_template('/index.html'))
 
-
+""" Route to handle auto-Tag generation duties """
 @bp.route('/generate_entry_tags', methods=['POST'])
 @login_required
 def generate_entry_tags():
     data = request.get_json()
     content = data.get('content', '')
     generated_tags = tags_generator(content)
-    #flash('hi')
     return json.dumps({'tags': generated_tags})
 
 
+""" Handles uploading files. Uploaded files permitted include
+    jpg, jpeg, png, gif, mp4, mp3, and avi. There is currently 
+    a 32MB file size cap. Files are stored by username (directory).
+    Further refinements should include purging old files no longer
+    displayed or linked to a user's journal entry. File attribute
+    checking (same filename, different files) are in the queue to
+    implement. This route also utilized secure_filename checking
+    to make shell injections more difficult.
+"""
 @bp.route('/new_entry', methods=['POST'])
 @login_required
 def upload_file(f_path, jrnl_entry, new_entry=True):
@@ -172,7 +198,12 @@ def upload_file(f_path, jrnl_entry, new_entry=True):
             return mf_path
 
 
-""" It isn't possible to show anything other than 'No File Chosen' in the form field.
+""" Edit entry supports changing the title, body, image, or tags of 
+    a post that has already been submitted. Edit entry essentially has
+    all of the functionality of new journal entries, just over the top
+    of an existing journal entry.
+    
+    It isn't possible to show anything other than 'No File Chosen' in the form field.
     Options to demosntrate there is a file there:
         1. Include a thumbnail under the Choose FileField
         2. Display text with the filename below it
@@ -191,30 +222,29 @@ def edit_entry(entry_id=None, media_id=None):
 
 
         upd_entry.entry_title=form.title.data
-        upd_entry.entry_body=form.content.data#.replace('\n', '<br/>')
+        upd_entry.entry_body=form.content.data
         db.session.add(upd_entry)
         db.session.commit()
           
-        # Process tags
-
         tags_str = form.tags.data
         if tags_str:
             new_tags = list()
             tags_list = [tag.strip() for tag in tags_str.split(',')]
             for tag_name in tags_list:
                 if tag_name:
-                    tag = db.session.scalar(sa.select(Tag).where(Tag.tag_name == tag_name))
+                    tag = db.session.scalar(sa.select(Tag).distinct().where(Tag.tag_name == tag_name))
                     if not tag:
                         tag = Tag(tag_name=tag_name)
                         db.session.add(tag)
-                    db.session.commit()
-                    new_tags.append(tag)
-            #flash(new_tags)           
+                        db.session.commit()
+                    if tag_name is not None and tag is not '':
+                        new_tags.append(tag)
+     
             upd_entry = db.first_or_404(sa.select(JournalEntry)
                  .where(JournalEntry.entry_id == entry_id and JournalEntry.user_id == current_user.user_id))  
             upd_entry.tags = []
-            for tag in new_tags:
-                upd_entry.tags.append(tag)
+            for t in new_tags:
+                upd_entry.tags.append(t)
             db.session.commit()
 
 
@@ -259,14 +289,15 @@ def edit_entry(entry_id=None, media_id=None):
                     )   
                     db.session.add(new_media)
                     db.session.commit()
+                    media_id = new_media.media_id
+                    #m_id = new_media.copy()
                     upd_entry = db.first_or_404(sa.select(JournalEntry)
                         .where(JournalEntry.entry_id == entry_id and JournalEntry.user_id == current_user.user_id))
                     upd_entry.media_id = new_media.media_id # media_id back populates after commit
-                    #upd_entry.entry_body=form.content.data#.replace('\n', '<br/>')
+
                     db.session.add(upd_entry)
                     db.session.commit()
-
-                    m_id.media_id = new_media.media_id
+                    return redirect(url_for('journal.journal')) 
         else:
             # no filename, but maybe that means no file attached?
             # TODO: Delete row? Replace with 1 pixel image?
@@ -296,4 +327,3 @@ def edit_entry(entry_id=None, media_id=None):
         pass
 
     return render_template('/journal/edit_entry.html', title='Edit Journal Entry', form=form, entry_id=entry_id, media_id=media_id)
-

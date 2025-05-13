@@ -5,12 +5,14 @@ from flask_migrate import Migrate
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
-from flask_bootstrap5 import Bootstrap
+from flask_bootstrap import Bootstrap5 as Bootstrap
 from werkzeug.utils import secure_filename
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
 from config import Config
 
+
+""" Initialize app, establish routes and blueprints, map to static file serving """
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -22,9 +24,8 @@ bootstrap = Bootstrap()
 
 def create_app(config_class=Config):
     app = Flask(__name__, static_folder='static',static_url_path='/app/static/')
-    #app = Flask(__name__, static_folder='./static')#,static_url_path='/app/journal/static/')
     app.config.from_object(config_class)
-    #app.config['MEDIA_UPLOADS'] = 'static/uploads/'
+    # legacy, replaced with validators
     app.config['ALLOWED_EXTENSIONS'] = [
         '.jpg', '.jpeg','.png', '.gif', '.mp4', '.avi', '.mp3', '.pdf',
         'jpg', 'gif', 'png', 'jpeg', 'mp4', 'avi', 'mp3', 'pdf'

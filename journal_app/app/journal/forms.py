@@ -11,6 +11,7 @@ from app import db
 from app.models import User, JournalEntry, JournalEntryTag, Tag, Media
 from app.journal import bp
 
+""" Journal Forms - currently the same for edit and new journal entry """
 class JournalEntryForm(FlaskForm):
     title = StringField(('Title'), validators=[DataRequired()])
     media_file = FileField('Media File', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif', 'mp4'])])

@@ -54,7 +54,38 @@ Then to start your Flask server, run:
 flask run
 ```
 
-## 👥 Contributors
+## Project Structure
+Digital-Time-Capsule/
+├── app/
+│ ├── pycache/
+│ ├── auth/
+│ ├── errors/
+│ ├── journal/
+│ ├── main/
+│ ├── static/
+│ ├── tags_generation/
+│ ├── templates/
+│ ├── tests/
+│ ├── init.py
+│ ├── GRR_journal_routes.py
+│ └── models.py
+├── journal_app/
+│ └── pycache/
+├── logs/
+├── migrations/
+├── static/
+├── .flaskenv
+├── app.db
+├── config.py
+├── GRR_journal_routes.py
+├── journal_app.py
+├── lo-fi_interface/
+├── .gitignore
+├── LICENSE
+├── README.md
+└── requirements.txt
+
+## Contributors
 
 - Rashmikaben Patel  
 - Matthew Sabel  
@@ -62,5 +93,6 @@ flask run
 - Soe Ko  
 - Peter Mansfield  
 - Ian Pontius
+
 
 

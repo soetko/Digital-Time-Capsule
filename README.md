@@ -57,26 +57,26 @@ flask run
 ## Project Structure
 ```
 Digital-Time-Capsule/
-├── app/
-│ ├── pycache/
-│ ├── auth/
-│ ├── errors/
-│ ├── journal/
-│ ├── main/
-│ ├── static/
-│ ├── tags_generation/
-│ ├── templates/
-│ ├── tests/
-│ ├── init.py
-│ └── models.py
 ├── journal_app/
-│ └── pycache/
-├── logs/
-├── migrations/
-├── static/
+│ ├── app/
+│ │ ├── auth
+│ │ ├── errors
+│ │ ├── journal
+│ │ ├── main
+│ │ ├── static
+│ │ ├── tags_generation
+│ │ ├── templates
+│ │ ├── tests
+│ │ ├── init.py
+│ │ ├── GRR_journal_routes.py
+│ │ ├── models.py
+│ ├── logs/
+│ ├── migrations/
+│ ├── static/
 ├── .flaskenv
 ├── app.db
 ├── config.py
+├── GRR_journal_routes.py
 ├── journal_app.py
 ├── lo-fi_interface/
 ├── .gitignore

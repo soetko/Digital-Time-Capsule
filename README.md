@@ -68,7 +68,6 @@ Digital-Time-Capsule/
 │ ├── templates/
 │ ├── tests/
 │ ├── init.py
-│ ├── GRR_journal_routes.py
 │ └── models.py
 ├── journal_app/
 │ └── pycache/
@@ -78,7 +77,6 @@ Digital-Time-Capsule/
 ├── .flaskenv
 ├── app.db
 ├── config.py
-├── GRR_journal_routes.py
 ├── journal_app.py
 ├── lo-fi_interface/
 ├── .gitignore

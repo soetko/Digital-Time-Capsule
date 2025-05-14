@@ -55,6 +55,7 @@ flask run
 ```
 
 ## Project Structure
+```
 Digital-Time-Capsule/
 ├── app/
 │ ├── pycache/
@@ -84,7 +85,7 @@ Digital-Time-Capsule/
 ├── LICENSE
 ├── README.md
 └── requirements.txt
-
+```
 ## Contributors
 
 - Rashmikaben Patel  
